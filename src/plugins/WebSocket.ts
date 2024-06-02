@@ -3,11 +3,11 @@ import type { Plugin } from 'vue'
 let url: string
 let websocket: WebSocket
 let heartBeatTimer: number
-let reconnectTimer: number
 
 const webSocketPlugin: Plugin = {
   install(_app, options: string) {
-    connectWebSocket(options)
+    url = options
+    connectWebSocket()
   }
 }
 
@@ -15,20 +15,19 @@ const webSocketPlugin: Plugin = {
  * 连接websocket
  * @param url websocket地址
  */
-function connectWebSocket(socketUrl: string) {
-  websocket = new WebSocket(socketUrl)
-  url = socketUrl
+function connectWebSocket() {
+  websocket = new WebSocket(url)
 
   websocket.onopen = () => {
     // 连接成功后发送数据
     console.log('Connected')
-    clearInterval(reconnectTimer)
     heartBeatTimer = startSendHeartBeat()
   }
 
   websocket.onclose = () => {
     clearInterval(heartBeatTimer)
-    console.log('cloooooooooooooooose')
+    if(websocket.readyState === 3)
+      connectWebSocket()
   }
 
   websocket.onmessage = (event) => {
@@ -36,6 +35,10 @@ function connectWebSocket(socketUrl: string) {
   }
 
   websocket.onerror = (error) => {
+    const errorSocket = error.target as WebSocket
+    
+    if(errorSocket.readyState === 3)
+      connectWebSocket()
     console.error('WebSocket error:', error)
   }
 }
