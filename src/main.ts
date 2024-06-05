@@ -14,7 +14,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(WebSocket, 'ws://127.0.0.1:9527/ctrl')
+app.use(WebSocket, import.meta.env.VITE_WS_URL)
 app.use(ElementPlus)
 
 app.mount('#app')

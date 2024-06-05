@@ -40,10 +40,18 @@ import { RouterView } from 'vue-router'
       border-bottom: solid 1px lightGray;
     }
 
-    .el-main {
-      height: 100%;
-      background-color: #ffffff;
-      border-left: solid 1px lightGray;
+    .el-container {
+      height: calc(100% - 100px);
+
+      .el-main {
+        height: 100%;
+        background-color: #ffffff;
+        border-left: solid 1px lightGray;
+      }
+
+      .el-aside {
+        height: 100%;
+      }
     }
   }
 }

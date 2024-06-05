@@ -1,4 +1,5 @@
 import type { Plugin } from 'vue'
+import type { WebSocketMsg, OperationTargetMap } from './types'
 
 let url: string
 let websocket: WebSocket
@@ -26,8 +27,7 @@ function connectWebSocket() {
 
   websocket.onclose = () => {
     clearInterval(heartBeatTimer)
-    if(websocket.readyState === 3)
-      connectWebSocket()
+    if (websocket.readyState === WebSocket.CLOSED) connectWebSocket()
   }
 
   websocket.onmessage = (event) => {
@@ -36,9 +36,8 @@ function connectWebSocket() {
 
   websocket.onerror = (error) => {
     const errorSocket = error.target as WebSocket
-    
-    if(errorSocket.readyState === 3)
-      connectWebSocket()
+
+    if (errorSocket.readyState === WebSocket.CLOSED) connectWebSocket()
     console.error('WebSocket error:', error)
   }
 }
@@ -56,9 +55,16 @@ export function disconnectWebSocket() {
  * 发送websocket数据
  * @param data 需要发送地数据
  */
-export function sendDataToWebSocket(data: any) {
+export function sendDataToWebSocket<T extends keyof OperationTargetMap>(data: WebSocketMsg<T>) {
   // 将数据转换为字符串并发送到服务器
-  websocket.send(JSON.stringify(data))
+  websocket.send(
+    JSON.stringify({
+      _type: 'web-panel',
+      clientName: 'web-panel',
+      timestamp: new Date().getTime(),
+      ...data
+    })
+  )
 }
 
 /**
@@ -67,7 +73,10 @@ export function sendDataToWebSocket(data: any) {
  */
 function startSendHeartBeat(): number {
   return setInterval(() => {
-    sendDataToWebSocket('ping')
+    sendDataToWebSocket({
+      clientId: 0,
+      operation: 'ping'
+    })
   }, 1000)
 }
 
