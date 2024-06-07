@@ -44,6 +44,7 @@ import { RouterView } from 'vue-router'
       height: calc(100% - 100px);
 
       .el-main {
+        padding-top: 0;
         height: 100%;
         background-color: #ffffff;
         border-left: solid 1px lightGray;
