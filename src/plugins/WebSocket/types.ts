@@ -1,11 +1,12 @@
+type PowerCtrl = 'poweron' | 'poweroff'
 export interface TargetOperationMap {
   ping: 'ping'
-  light: 'poweron' | 'poweroff'
-  computer: 'poweron' | 'poweroff'
+  light: PowerCtrl
+  computer: PowerCtrl
   media: 'normal' | 'positioning' | 'mute' | 'unmute'
-  screen: 'poweron' | 'poweroff'
-  soundbox: 'poweron' | 'poweroff'
-  led: 'poweron' | 'poweroff'
+  screen: PowerCtrl
+  soundbox: PowerCtrl
+  led: PowerCtrl
 }
 
 export interface TargetParamMap {
@@ -22,7 +23,14 @@ type OperationType<T extends keyof TargetParamMap> = TargetOperationMap[T]
 type ParamType<T extends keyof TargetParamMap> = TargetParamMap[T]
 
 export interface WebSocketMsg<
-  T extends keyof TargetOperationMap = 'ping' | 'light' | 'computer' | 'media'
+  T extends keyof TargetOperationMap =
+    | 'ping'
+    | 'light'
+    | 'computer'
+    | 'media'
+    | 'screen'
+    | 'soundbox'
+    | 'led'
 > {
   target?: T
   operation: OperationType<T>
