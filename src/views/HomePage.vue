@@ -6,18 +6,41 @@ import { ctrlLight } from '@/api/light'
 import { ctrlLed } from '@/api/led'
 import { ctrSoundBox } from '@/api/soundbox'
 import { ctrlScreen } from '@/api/screen'
-import { ref } from 'vue'
+import { ref ,computed} from 'vue'
 
 const lightId = ref<number>(1)
+const isAllSelect = ref(false)
+const isLightSelect = ref(false)
+const isEquipmentelect = ref(false)
+
+const allClick = (value : boolean) =>{
+  isAllSelect.value = value
+}
+
+const lightClick = (value : boolean) =>{
+  isLightSelect.value = value
+}
+
+
+const equipmentClick = (value : boolean) =>{
+  isEquipmentelect.value = value
+}
+
+const allBtnOn = computed(() => (!isAllSelect.value ? 'selectAllBtn' : 'unSelectAllBtn'))
+const allBtnOff = computed(() => (isAllSelect.value ? 'selectAllBtn' : 'unSelectAllBtn'))
+const lightBtnOn = computed(() => (!isLightSelect.value ? 'selectAllBtn' : 'unSelectAllBtn'))
+const lightBtnOff = computed(() => (isLightSelect.value ? 'selectAllBtn' : 'unSelectAllBtn'))
+const equipmentBtnOn = computed(() =>(!isEquipmentelect.value ? 'selectAllBtn' : 'unSelectAllBtn'))
+const equipmentBtnOff = computed(() =>(isEquipmentelect.value ? 'selectAllBtn' : 'unSelectAllBtn'))
 </script>
 
 <template>
-  <div id="main-container">
-    <div style="margin-top: 10px">信达展厅控制面板</div>
+  <!-- <div id="main-container">
+     <div style="margin-top: 10px">信达展厅控制面板</div> 
     <el-divider />
 
     <b>电脑控制</b>
-    <br />
+    <br /> 
 
     <InnoventButton @click="ctrlPC('poweron', 'host', 'welcome')" :throttle-delay="1000">
       顶面欢迎主机开
@@ -218,17 +241,108 @@ const lightId = ref<number>(1)
     <InnoventButton @click="ctrlScreen('poweroff', 3)" :throttle-delay="1000">
       大屏3：关
     </InnoventButton>
+  </div> -->
+  <div id="main-container">
+    <img class="logo" src="@/images/logo.png" alt="">
+
+    <div class="control-region">
+      <div class="title">设备总控</div>
+      <div class="btn">
+        <div>
+          <div class="box">
+            <div :class="allBtnOn" @click="allClick(true)">
+             全部开
+            </div>
+            <div :class="allBtnOff" @click="allClick(false)">
+              全部关
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div :class="lightBtnOn" @click="lightClick(true)">
+             灯全开
+            </div>
+            <div :class="lightBtnOff" @click="lightClick(false)">
+              灯全关
+            </div>
+        </div>
+        <div class="box">
+          <div :class="equipmentBtnOn" @click="equipmentClick(true)">
+             设备全开
+            </div>
+            <div :class="equipmentBtnOff" @click="equipmentClick(false)">
+              设备全关
+            </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <style scoped lang="scss">
 #main-container {
+  width: 100%;
+  height: 100%;
+  background-image: url(@/images/中控背景.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   text-align: center;
   color: #888;
   overflow: scroll;
 
-  .el-button {
-    margin: 10px;
+  .logo{
+    position: fixed;
+    left: 150px;
+    top: 150px;
+    width: 300px;
+    height: 97px;
   }
+
+  .control-region{
+    width: 100%;
+    height: 75%;
+    margin-top: 410px;
+
+    .title{
+    font-size: 68px;
+    font-weight: 700;
+    color: #305cc9;
+    padding-bottom: 270px;
+  }
+
+  .btn{
+    display: flex;
+    justify-content: space-evenly;
+    .box{
+      display: flex;
+      justify-content: space-between;
+      width: 460px;
+      height: 220px;
+      line-height: 220px;
+      font-size: 30px;
+      .selectAllBtn{
+        width: 240px;
+        height: 240px;
+        color: #305cc9;
+        background-image: url(@/images/白色.png);
+        background-size:100%;
+        background-repeat: no-repeat;
+      }
+      .unSelectAllBtn{
+        width: 240px;
+        height: 240px;
+        color: #ffffff;
+        background-image: url(@/images/蓝色.png);
+        background-size:100%;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+  }
+  // .el-button {
+  //   margin: 10px;
+  // }
 }
 </style>

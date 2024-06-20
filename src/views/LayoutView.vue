@@ -8,15 +8,15 @@ import { RouterView } from 'vue-router'
   <div id="main-container">
     <el-container>
       <!-- Header -->
-      <el-header>
+      <!-- <el-header>
         <Header />
-      </el-header>
+      </el-header> -->
 
       <el-container>
         <!-- Aside -->
-        <el-aside width="400px">
+        <!-- <el-aside width="400px">
           <Aside />
-        </el-aside>
+        </el-aside> -->
 
         <!-- Main -->
         <el-main>
@@ -34,20 +34,21 @@ import { RouterView } from 'vue-router'
   .el-container {
     height: 100%;
 
-    .el-header {
-      height: 100px;
-      padding: 0;
-      border-bottom: solid 1px lightGray;
-    }
+    // .el-header {
+    //   height: 100px;
+    //   padding: 0;
+    //   border-bottom: solid 1px lightGray;
+    // }
 
     .el-container {
-      height: calc(100% - 100px);
+     // height: calc(100% - 100px);
 
       .el-main {
-        padding-top: 0;
+        padding: 0;
         height: 100%;
+        width: 100%;
         background-color: #ffffff;
-        border-left: solid 1px lightGray;
+        //border-left: solid 1px lightGray;
       }
 
       .el-aside {
