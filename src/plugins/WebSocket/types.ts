@@ -1,22 +1,38 @@
 type PowerCtrl = 'poweron' | 'poweroff'
 export interface TargetOperationMap {
   ping: 'ping'
-  light: PowerCtrl
+
   computer: PowerCtrl
   media: 'normal' | 'positioning' | 'mute' | 'unmute'
+  'big-screen': PowerCtrl
+  led: 'mode'
+
+  relay: PowerCtrl
+  light: PowerCtrl
+  'leader-screen': PowerCtrl
+  'pipeline-screen': PowerCtrl
   screen: PowerCtrl
+
   soundbox: PowerCtrl
-  led: PowerCtrl
+  sequential: PowerCtrl
 }
 
 export interface TargetParamMap {
   ping: never
-  light: number
+
   computer: ComputerParam
   media: 1 | 2 | 3 | 4
-  screen: 1 | 2 | 3
+  'big-screen': 'global' | 'welcome' | 'future'
+  led: number
+
+  relay: never
+  light: number | 'all'
+  'leader-screen': 1 | 2
+  'pipeline-screen': 1 | 2
+  screen: never
+
   soundbox: never
-  led: never
+  sequential: never
 }
 
 type OperationType<T extends keyof TargetParamMap> = TargetOperationMap[T]
@@ -28,7 +44,7 @@ export interface WebSocketMsg<
     | 'light'
     | 'computer'
     | 'media'
-    | 'screen'
+    | 'big-screen'
     | 'soundbox'
     | 'led'
 > {
@@ -39,7 +55,7 @@ export interface WebSocketMsg<
 
 /* Params */
 export interface ComputerParam {
-  type: 'host' | 'leaderHost' | 'medicine' | 'global'
+  type: 'host' | 'leaderHost' | 'medicine' | 'global' | 'integrated' | 'hosts'
   name: string
 }
 

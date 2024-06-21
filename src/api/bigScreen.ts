@@ -2,15 +2,16 @@ import { sendDataToWebSocket } from '@/plugins/WebSocket'
 import type { TargetOperationMap, TargetParamMap } from '@/plugins/WebSocket/types'
 
 /**
- * LED控制
+ * 灯带控制
+ * @param operation 操作
  * @param operationParam 操作参数
  */
-export function ctrlLed(
-  operation: TargetOperationMap['led'],
-  operationParam: TargetParamMap['led']
+export function ctrlBigScreen(
+  operation: TargetOperationMap['big-screen'],
+  operationParam?: TargetParamMap['big-screen']
 ): void {
   sendDataToWebSocket({
-    target: 'led',
+    target: 'big-screen',
     operation,
     operationParam
   })

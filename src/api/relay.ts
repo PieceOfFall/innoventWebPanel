@@ -2,12 +2,12 @@ import { sendDataToWebSocket } from '@/plugins/WebSocket'
 import type { TargetOperationMap } from '@/plugins/WebSocket/types'
 
 /**
- * 继电器下屏幕控制
+ * 继电器下所有设备控制
  * @param operation 操作
  */
-export function ctrScreen(operation: TargetOperationMap['screen']): void {
+export function ctrRelay(operation: TargetOperationMap['relay']): void {
   sendDataToWebSocket({
-    target: 'screen',
+    target: 'relay',
     operation
   })
 }

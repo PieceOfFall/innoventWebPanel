@@ -2,12 +2,12 @@ import { sendDataToWebSocket } from '@/plugins/WebSocket'
 import type { TargetOperationMap } from '@/plugins/WebSocket/types'
 
 /**
- * 继电器下屏幕控制
+ * 时序电源总控制
  * @param operation 操作
  */
-export function ctrScreen(operation: TargetOperationMap['screen']): void {
+export function ctrSequential(operation: TargetOperationMap['sequential']): void {
   sendDataToWebSocket({
-    target: 'screen',
+    target: 'sequential',
     operation
   })
 }
