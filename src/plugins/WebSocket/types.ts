@@ -64,3 +64,8 @@ export interface LedParam {
   g: number
   b: number
 }
+
+export interface CtrlMsg {
+  code: 0 | 1 | 2
+  msg: string
+}

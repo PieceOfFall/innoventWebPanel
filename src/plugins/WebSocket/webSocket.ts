@@ -1,7 +1,15 @@
-import type { WebSocketMsg, TargetOperationMap } from './types'
+import type { WebSocketMsg, TargetOperationMap, CtrlMsg } from './types'
+import { ElMessage, type MessageHandler } from 'element-plus'
 
 let websocket: WebSocket
 let heartBeatTimer: number
+
+const messageFunctions = {
+  0: ElMessage.error,
+  1: ElMessage.success,
+  2: ElMessage.info
+}
+let lastElMsg: MessageHandler
 
 /**
  * 连接websocket
@@ -23,6 +31,11 @@ export function connectWebSocket(url: string) {
 
   websocket.onmessage = (event) => {
     console.log(event.data)
+
+    const ctrlMsg = JSON.parse(event.data) as CtrlMsg
+    const ElMsgFuction: typeof ElMessage.info = messageFunctions[ctrlMsg.code]
+    lastElMsg?.close()
+    lastElMsg = ElMsgFuction({ message: ctrlMsg.msg })
   }
 
   websocket.onerror = (error) => {
