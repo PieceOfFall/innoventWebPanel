@@ -20,7 +20,7 @@ export function connectWebSocket(url: string) {
 
   websocket.onopen = () => {
     // 连接成功后发送数据
-    console.log('Connected')
+    ElMessage.success({ message: '服务连接成功' })
     heartBeatTimer = startSendHeartBeat()
   }
 
