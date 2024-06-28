@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import InnoventButton from '@/components/InnoventButton.vue'
+//import InnoventButton from '@/components/InnoventButton.vue'
 import { ctrlPC, ctrlLight, ctrRelay, ctrSequential } from '@/api'
 import { ref } from 'vue'
 
-const lightId = ref<number>(1)
+//const lightId = ref<number>(1)
 const isAllSelect = ref(false)
 const isLightSelect = ref(false)
 const isEquipmentelect = ref(false)
@@ -378,6 +378,7 @@ const equipmentClick = (value: boolean) => {
     .btn {
       display: flex;
       justify-content: space-evenly;
+
       .box {
         display: flex;
         justify-content: space-between;
@@ -385,6 +386,7 @@ const equipmentClick = (value: boolean) => {
         height: 220px;
         line-height: 220px;
         font-size: 30px;
+
         .selectAllBtn {
           width: 240px;
           height: 240px;
@@ -401,8 +403,5 @@ const equipmentClick = (value: boolean) => {
       }
     }
   }
-  // .el-button {
-  //   margin: 10px;
-  // }
 }
 </style>

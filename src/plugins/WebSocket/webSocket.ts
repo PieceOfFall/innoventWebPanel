@@ -1,13 +1,13 @@
-import type { WebSocketMsg, TargetOperationMap, CtrlMsg } from './types'
-import { ElMessage, type MessageHandler } from 'element-plus'
+import { type WebSocketMsg, type TargetOperationMap, type CtrlMsg, MsgCode } from './types'
+import { ElMessage, type MessageHandler, type MessageTypedFn } from 'element-plus'
 
 let websocket: WebSocket
 let heartBeatTimer: number
 
-const messageFunctions = {
-  0: ElMessage.error,
-  1: ElMessage.success,
-  2: ElMessage.info
+const messageFunctions: Record<MsgCode.Error | MsgCode.Success | MsgCode.Info, MessageTypedFn> = {
+  [MsgCode.Error]: ElMessage.error,
+  [MsgCode.Success]: ElMessage.success,
+  [MsgCode.Info]: ElMessage.info
 }
 let lastElMsg: MessageHandler
 
@@ -30,17 +30,19 @@ export function connectWebSocket(url: string) {
   }
 
   websocket.onmessage = (event) => {
-    console.log(event.data)
-
     const ctrlMsg = JSON.parse(event.data) as CtrlMsg
-    const ElMsgFuction: typeof ElMessage.info = messageFunctions[ctrlMsg.code]
-    lastElMsg?.close()
-    lastElMsg = ElMsgFuction({ message: ctrlMsg.msg })
+
+    if (ctrlMsg.code !== MsgCode.NotAlert) {
+      const ElMsgFuction: typeof ElMessage.info = messageFunctions[ctrlMsg.code]
+      lastElMsg?.close()
+      lastElMsg = ElMsgFuction({ message: ctrlMsg.msg })
+    } else console.log(ctrlMsg.msg)
+
+    if (ctrlMsg.code === MsgCode.Error) console.error(ctrlMsg.msg)
   }
 
   websocket.onerror = (error) => {
     const errorSocket = error.target as WebSocket
-
     if (errorSocket.readyState === WebSocket.CLOSED) connectWebSocket(url)
     console.error('WebSocket error:', error)
   }
@@ -61,15 +63,24 @@ export function disconnectWebSocket() {
  */
 export function sendDataToWebSocket<T extends keyof TargetOperationMap>(data: WebSocketMsg<T>) {
   // 将数据转换为字符串并发送到服务器
-  websocket.send(
-    JSON.stringify({
-      _type: 'web-panel',
-      clientId: import.meta.env.VITE_CLIENT_ID as number,
-      clientName: 'web-panel',
-      timestamp: new Date().getTime(),
-      ...data
-    })
-  )
+  try {
+    websocket.send(
+      JSON.stringify({
+        _type: 'web-panel',
+        clientId: import.meta.env.VITE_CLIENT_ID as number,
+        clientName: 'web-panel',
+        timestamp: new Date().getTime(),
+        ...data
+      })
+    )
+  } catch (e) {
+    if (e instanceof Error && e.name === 'InvalidStateError') {
+      console.error(e)
+      ElMessage.error({
+        message: '服务连接异常'
+      })
+    }
+  }
 }
 
 /**

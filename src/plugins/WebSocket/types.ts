@@ -66,6 +66,13 @@ export interface LedParam {
 }
 
 export interface CtrlMsg {
-  code: 0 | 1 | 2
+  code: MsgCode
   msg: string
+}
+
+export enum MsgCode {
+  Error,
+  Success,
+  Info,
+  NotAlert
 }
