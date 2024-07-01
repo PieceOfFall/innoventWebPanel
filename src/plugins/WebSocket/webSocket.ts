@@ -38,7 +38,7 @@ export function connectWebSocket(url: string) {
       lastElMsg = ElMsgFuction({ message: ctrlMsg.msg })
     } else console.log(ctrlMsg.msg)
 
-    if (ctrlMsg.code === MsgCode.Error) console.error(ctrlMsg.msg)
+    if (ctrlMsg.code === MsgCode.Info || ctrlMsg.code === MsgCode.Error) console.error(ctrlMsg.msg)
   }
 
   websocket.onerror = (error) => {

@@ -34,21 +34,12 @@ import { RouterView } from 'vue-router'
   .el-container {
     height: 100%;
 
-    // .el-header {
-    //   height: 100px;
-    //   padding: 0;
-    //   border-bottom: solid 1px lightGray;
-    // }
-
     .el-container {
-     // height: calc(100% - 100px);
-
       .el-main {
         padding: 0;
         height: 100%;
         width: 100%;
         background-color: #ffffff;
-        //border-left: solid 1px lightGray;
       }
 
       .el-aside {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //import InnoventButton from '@/components/InnoventButton.vue'
 import { ctrlPC, ctrlLight, ctrRelay, ctrSequential } from '@/api'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
 //const lightId = ref<number>(1)
 const isAllSelect = ref(false)
@@ -18,6 +18,14 @@ function handleAllEquipment(allEquipmentStatus: boolean) {
   ctrlPC(ctrlStatus, 'integrated', 'all')
   ctrRelay(ctrlStatus)
   ctrSequential(ctrlStatus)
+}
+
+const handleTouchStart = (event: TouchEvent) => {
+  // 获取触摸点下的DOM元素
+  const touchedElement = event.target as HTMLElement
+
+  // 向被触摸的元素添加 'active' 类
+  touchedElement.classList.add('active')
 }
 
 /* 点击事件 */
@@ -319,85 +327,100 @@ const equipmentClick = (value: boolean) => {
     </InnoventButton>
   </div> -->
   <div id="main-container">
-    <img class="logo" src="@/images/logo.png" />
-
     <div class="control-region">
-      <div class="title">设备总控</div>
-      <div class="btn">
-        <div>
-          <div class="box">
-            <div class="selectAllBtn" @click="allClick(true)">全部开</div>
-            <div class="selectAllBtn" @click="allClick(false)">全部关</div>
+      <div class="logo"><img src="@/images/logo.png" /></div>
+
+      <div class="content">
+        <div class="title">设备总控</div>
+        <div class="btns">
+          <div>
+            <div class="box">
+              <div class="btn" @touchstart="handleTouchStart" @click="allClick(true)">全部开</div>
+              <div class="btn" @touchstart="handleTouchStart" @click="allClick(false)">全部关</div>
+            </div>
           </div>
-        </div>
-        <div class="box">
-          <div class="selectAllBtn" @click="lightClick(true)">灯全开</div>
-          <div class="selectAllBtn" @click="lightClick(false)">灯全关</div>
-        </div>
-        <div class="box">
-          <div class="selectAllBtn" @click="equipmentClick(true)">设备全开</div>
-          <div class="selectAllBtn" @click="equipmentClick(false)">设备全关</div>
+          <div class="box">
+            <div class="btn" @touchstart="handleTouchStart" @click="lightClick(true)">灯全开</div>
+            <div class="btn" @touchstart="handleTouchStart" @click="lightClick(false)">灯全关</div>
+          </div>
+          <div class="box">
+            <div class="btn" @touchstart="handleTouchStart" @click="equipmentClick(true)">
+              设备全开
+            </div>
+            <div class="btn" @touchstart="handleTouchStart" @click="equipmentClick(false)">
+              设备全关
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 #main-container {
-  width: 100%;
-  height: 100%;
   background-image: url(@/images/中控背景.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  text-align: center;
+  height: 100%;
   color: #888;
   overflow: scroll;
-
-  .logo {
-    position: fixed;
-    left: 150px;
-    top: 150px;
-    width: 300px;
-    height: 97px;
-  }
+  -webkit-user-select: none; /* Safari */
 
   .control-region {
     width: 100%;
-    height: 75%;
-    margin-top: 410px;
+    height: 100%;
 
-    .title {
-      font-size: 68px;
-      font-weight: 700;
-      color: #305cc9;
-      padding-bottom: 270px;
+    .logo {
+      padding-top: 80px;
+      padding-left: 100px;
+      img {
+        height: 60px;
+      }
     }
 
-    .btn {
-      display: flex;
-      justify-content: space-evenly;
+    .content {
+      padding-top: 80px;
+      text-align: center;
 
-      .box {
+      .title {
+        font-size: 45px;
+        font-weight: bold;
+        color: #305cc9;
+      }
+
+      .btns {
+        width: 100%;
         display: flex;
-        justify-content: space-between;
-        width: 460px;
-        height: 220px;
-        line-height: 220px;
-        font-size: 30px;
+        margin-top: 100px;
+        justify-content: space-evenly;
 
-        .selectAllBtn {
-          width: 240px;
-          height: 240px;
-          color: #305cc9;
-          background-image: url(@/images/白色.png);
-          background-size: 100%;
-          background-repeat: no-repeat;
+        .box {
+          display: flex;
+          justify-content: space-between;
 
-          &:active {
-            background-image: url(@/images/蓝色.png);
-            color: #ffffff;
+          .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            height: 150px;
+            width: 150px;
+            color: #305cc9;
+            font-size: 25px;
+            font-weight: bold;
+            padding-left: 8px;
+
+            background-image: url(@/images/白色.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+
+            &:active {
+              color: white;
+              background-image: url(@/images/蓝色.png);
+            }
           }
         }
       }
