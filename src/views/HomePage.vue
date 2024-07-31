@@ -1,6 +1,6 @@
 <script setup lang="ts">
 //import InnoventButton from '@/components/InnoventButton.vue'
-import { ctrlPC, ctrlLight, ctrRelay, ctrSequential } from '@/api'
+import { ctrlPC, ctrlLight, ctrRelay, ctrSequential, ctrlBigScreen } from '@/api'
 import { ref, reactive } from 'vue'
 
 //const lightId = ref<number>(1)
@@ -18,6 +18,7 @@ function handleAllEquipment(allEquipmentStatus: boolean) {
   ctrlPC(ctrlStatus, 'integrated', 'all')
   ctrRelay(ctrlStatus)
   ctrSequential(ctrlStatus)
+  ctrlBigScreen(ctrlStatus)
 }
 
 const handleTouchStart = (event: TouchEvent) => {

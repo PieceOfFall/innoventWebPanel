@@ -2,7 +2,7 @@ import { sendDataToWebSocket } from '@/plugins/WebSocket'
 import type { TargetOperationMap, TargetParamMap } from '@/plugins/WebSocket/types'
 
 /**
- * 灯带控制
+ * 大屏控制
  * @param operation 操作
  * @param operationParam 操作参数
  */
