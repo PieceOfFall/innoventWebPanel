@@ -33,19 +33,24 @@ const handleTouchStart = (event: TouchEvent) => {
 
 type EquipmentStatus = 'idle' | 'closing' | 'opening'
 let equipmentStatus: EquipmentStatus = 'idle'
+let timerStopTime: number | null = null
 
 /**
  * 检查是否需要进行点击处理
  */
 function checkHandleNeed(): boolean {
+  let timeLeft: number | null = null
+  if (timerStopTime !== null) {
+    timeLeft = (timerStopTime - new Date().getTime()) / 1000
+  }
   if (equipmentStatus === 'closing') {
     ElMessage({
-      message: '正在关闭中，请稍后再试'
+      message: `正在关闭中，请${Math.floor(timeLeft as number)}秒后再试`
     })
     return false
   } else if (equipmentStatus === 'opening') {
     ElMessage({
-      message: '正在启动中，请稍后再试'
+      message: `正在启动中，请${Math.floor(timeLeft as number)}秒后再试`
     })
     return false
   }
@@ -58,8 +63,10 @@ const allClick = (value: boolean) => {
   if (!checkHandleNeed()) return
   else {
     equipmentStatus = value ? 'opening' : 'closing'
+    timerStopTime = new Date().getTime() + 30 * 1000
     setTimeout(() => {
       equipmentStatus = 'idle'
+      timerStopTime = null
     }, 30 * 1000);
   }
 
@@ -77,8 +84,10 @@ const equipmentClick = (value: boolean) => {
   if (!checkHandleNeed()) return
   else {
     equipmentStatus = value ? 'opening' : 'closing'
+    timerStopTime = new Date().getTime() + 30 * 1000
     setTimeout(() => {
       equipmentStatus = 'idle'
+      timerStopTime = null
     }, 30 * 1000);
   }
 
