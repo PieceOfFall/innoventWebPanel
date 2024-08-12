@@ -1,12 +1,13 @@
 <script setup lang="ts">
 //import InnoventButton from '@/components/InnoventButton.vue'
-import { ctrlPC, ctrlLight, ctrRelay, ctrSequential, ctrlBigScreen } from '@/api'
-import { ref, reactive } from 'vue'
+import { ctrlPC, ctrlLight, ctrSequential, ctrlBigScreen, ctrlMedia } from '@/api'
+import { ElMessage } from 'element-plus';
+import { ref } from 'vue'
 
 //const lightId = ref<number>(1)
 const isAllSelect = ref(false)
 const isLightSelect = ref(false)
-const isEquipmentelect = ref(false)
+const isEquipmentSelect = ref(false)
 
 function handleAllLight(allLightStatus: boolean) {
   ctrlLight(allLightStatus ? 'poweron' : 'poweroff', 'all')
@@ -16,9 +17,10 @@ function handleAllEquipment(allEquipmentStatus: boolean) {
   const ctrlStatus: 'poweron' | 'poweroff' = allEquipmentStatus ? 'poweron' : 'poweroff'
   ctrlPC(ctrlStatus, 'hosts', 'all')
   ctrlPC(ctrlStatus, 'integrated', 'all')
-  ctrRelay(ctrlStatus)
   ctrSequential(ctrlStatus)
-  ctrlBigScreen(ctrlStatus)
+  ctrlBigScreen(ctrlStatus, 'global')
+  ctrlBigScreen(ctrlStatus, 'future')
+  ctrlBigScreen(ctrlStatus, 'welcome')
 }
 
 const handleTouchStart = (event: TouchEvent) => {
@@ -29,8 +31,38 @@ const handleTouchStart = (event: TouchEvent) => {
   touchedElement.classList.add('active')
 }
 
+type EquipmentStatus = 'idle' | 'closing' | 'opening'
+let equipmentStatus: EquipmentStatus = 'idle'
+
+/**
+ * 检查是否需要进行点击处理
+ */
+function checkHandleNeed(): boolean {
+  if (equipmentStatus === 'closing') {
+    ElMessage({
+      message: '正在关闭中，请稍后再试'
+    })
+    return false
+  } else if (equipmentStatus === 'opening') {
+    ElMessage({
+      message: '正在启动中，请稍后再试'
+    })
+    return false
+  }
+  return true
+}
+
 /* 点击事件 */
 const allClick = (value: boolean) => {
+
+  if (!checkHandleNeed()) return
+  else {
+    equipmentStatus = value ? 'opening' : 'closing'
+    setTimeout(() => {
+      equipmentStatus = 'idle'
+    }, 30 * 1000);
+  }
+
   isAllSelect.value = value
   handleAllLight(value)
   handleAllEquipment(value)
@@ -42,8 +74,22 @@ const lightClick = (value: boolean) => {
 }
 
 const equipmentClick = (value: boolean) => {
-  isEquipmentelect.value = value
+  if (!checkHandleNeed()) return
+  else {
+    equipmentStatus = value ? 'opening' : 'closing'
+    setTimeout(() => {
+      equipmentStatus = 'idle'
+    }, 30 * 1000);
+  }
+
+  isEquipmentSelect.value = value
   handleAllEquipment(value)
+}
+
+
+let isPositioning = ref(false)
+function changeMode(value: boolean) {
+  ctrlMedia(value ? 'positioning' : 'normal')
 }
 </script>
 
@@ -353,6 +399,7 @@ const equipmentClick = (value: boolean) => {
             </div>
           </div>
         </div>
+        <el-switch @change="changeMode" v-model="isPositioning" active-text=" 定位模式" />
       </div>
     </div>
   </div>
@@ -367,7 +414,9 @@ const equipmentClick = (value: boolean) => {
   height: 100%;
   color: #888;
   overflow: scroll;
-  -webkit-user-select: none; /* Safari */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Safari */
 
   .control-region {
     width: 100%;
@@ -376,6 +425,7 @@ const equipmentClick = (value: boolean) => {
     .logo {
       padding-top: 80px;
       padding-left: 100px;
+
       img {
         height: 60px;
       }

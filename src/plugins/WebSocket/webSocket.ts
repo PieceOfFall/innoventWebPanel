@@ -33,9 +33,9 @@ export function connectWebSocket(url: string) {
     const ctrlMsg = JSON.parse(event.data) as CtrlMsg
 
     if (ctrlMsg.code !== MsgCode.NotAlert) {
-      const ElMsgFuction: typeof ElMessage.info = messageFunctions[ctrlMsg.code]
+      const ElMsgFunction: typeof ElMessage.info = messageFunctions[ctrlMsg.code]
       lastElMsg?.close()
-      lastElMsg = ElMsgFuction({ message: ctrlMsg.msg })
+      lastElMsg = ElMsgFunction({ message: ctrlMsg.msg })
     } else console.log(ctrlMsg.msg)
 
     if (ctrlMsg.code === MsgCode.Info || ctrlMsg.code === MsgCode.Error) console.error(ctrlMsg.msg)
