@@ -39,19 +39,19 @@ let timerStopTime: number | null = null
  * 检查是否需要进行点击处理
  */
 function checkHandleNeed(): boolean {
-  let timeLeft: number | null = null
   if (timerStopTime !== null) {
-    timeLeft = (timerStopTime - new Date().getTime()) / 1000
-  }
-  if (equipmentStatus === 'closing') {
-    ElMessage({
-      message: `正在关闭中，请${Math.floor(timeLeft as number)}秒后再试`
-    })
-    return false
-  } else if (equipmentStatus === 'opening') {
-    ElMessage({
-      message: `正在启动中，请${Math.floor(timeLeft as number)}秒后再试`
-    })
+    const timeLeft = (timerStopTime - new Date().getTime()) / 1000
+
+    if (equipmentStatus === 'closing') {
+      ElMessage({
+        message: `正在关闭中，请${Math.floor(timeLeft)}秒后再试`
+      })
+
+    } else if (equipmentStatus === 'opening') {
+      ElMessage({
+        message: `正在启动中，请${Math.floor(timeLeft)}秒后再试`
+      })
+    }
     return false
   }
   return true
@@ -97,7 +97,7 @@ const equipmentClick = (value: boolean) => {
 
 
 let isPositioning = ref(false)
-function changeMode(value: boolean) {
+function togglePositioning(value: boolean) {
   ctrlMedia(value ? 'positioning' : 'normal')
 }
 </script>
@@ -407,8 +407,15 @@ function changeMode(value: boolean) {
               设备全关
             </div>
           </div>
+          <!-- <div class="box">
+            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(false)">
+              常规模式
+            </div>
+            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(true)">
+              定位模式
+            </div>
+          </div> -->
         </div>
-        <el-switch @change="changeMode" v-model="isPositioning" active-text=" 定位模式" />
       </div>
     </div>
   </div>
