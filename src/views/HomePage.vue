@@ -9,18 +9,25 @@ const isAllSelect = ref(false)
 const isLightSelect = ref(false)
 const isEquipmentSelect = ref(false)
 
-function handleAllLight(allLightStatus: boolean) {
+const handleAllLight = async (allLightStatus: boolean) => {
   ctrlLight(allLightStatus ? 'poweron' : 'poweroff', 'all')
+  await delay(2000)
 }
 
-function handleAllEquipment(allEquipmentStatus: boolean) {
+const delay = async (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time))
+
+async function handleAllEquipment(allEquipmentStatus: boolean) {
   const ctrlStatus: 'poweron' | 'poweroff' = allEquipmentStatus ? 'poweron' : 'poweroff'
+  ctrlBigScreen(ctrlStatus, 'global')
+  await delay(2000)
+  ctrlBigScreen(ctrlStatus, 'future')
+  await delay(2000)
+  ctrlBigScreen(ctrlStatus, 'welcome')
   ctrlPC(ctrlStatus, 'hosts', 'all')
+  await delay(2000)
   ctrlPC(ctrlStatus, 'integrated', 'all')
   ctrSequential(ctrlStatus)
-  ctrlBigScreen(ctrlStatus, 'global')
-  ctrlBigScreen(ctrlStatus, 'future')
-  ctrlBigScreen(ctrlStatus, 'welcome')
 }
 
 const handleTouchStart = (event: TouchEvent) => {
@@ -42,23 +49,16 @@ function checkHandleNeed(): boolean {
   if (timerStopTime !== null) {
     const timeLeft = (timerStopTime - new Date().getTime()) / 1000
 
-    if (equipmentStatus === 'closing') {
-      ElMessage({
-        message: `正在关闭中，请${Math.floor(timeLeft)}秒后再试`
-      })
-
-    } else if (equipmentStatus === 'opening') {
-      ElMessage({
-        message: `正在启动中，请${Math.floor(timeLeft)}秒后再试`
-      })
-    }
+    ElMessage({
+      message: `正在${equipmentStatus === 'closing' ? '关闭' : '启动'}中，请${Math.floor(timeLeft)}秒后再试`
+    })
     return false
   }
   return true
 }
 
 /* 点击事件 */
-const allClick = (value: boolean) => {
+const allClick = async (value: boolean) => {
 
   if (!checkHandleNeed()) return
   else {
@@ -71,16 +71,19 @@ const allClick = (value: boolean) => {
   }
 
   isAllSelect.value = value
-  handleAllLight(value)
-  handleAllEquipment(value)
+  console.log(new Date().getTime());
+
+  await handleAllLight(value)
+  console.log(new Date().getTime());
+  await handleAllEquipment(value)
 }
 
-const lightClick = (value: boolean) => {
+const lightClick = async (value: boolean) => {
   isLightSelect.value = value
-  handleAllLight(value)
+  await handleAllLight(value)
 }
 
-const equipmentClick = (value: boolean) => {
+const equipmentClick = async (value: boolean) => {
   if (!checkHandleNeed()) return
   else {
     equipmentStatus = value ? 'opening' : 'closing'
@@ -92,7 +95,7 @@ const equipmentClick = (value: boolean) => {
   }
 
   isEquipmentSelect.value = value
-  handleAllEquipment(value)
+  await handleAllEquipment(value)
 }
 
 
@@ -416,6 +419,26 @@ function togglePositioning(value: boolean) {
             </div>
           </div> -->
         </div>
+        <div class="btns">
+         
+          <div class="box">
+            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(false)">
+              常规模式
+            </div>
+            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(true)">
+              定位模式
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(false)">
+              监控显示
+            </div>
+            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(true)">
+              监控隐藏
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -429,7 +452,7 @@ function togglePositioning(value: boolean) {
   background-position: center;
   height: 100%;
   color: #888;
-  overflow: scroll;
+  overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
   /* Safari */
