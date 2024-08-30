@@ -4,6 +4,7 @@ export interface TargetOperationMap {
 
   computer: PowerCtrl
   media: 'normal' | 'positioning' | 'mute' | 'unmute'
+  monitor: 'visible' |  'hidden'
   'big-screen': PowerCtrl
   led: 'mode'
 
@@ -24,6 +25,7 @@ export interface TargetParamMap {
   media: 1 | 2 | 3 | 4
   'big-screen': 'global' | 'welcome' | 'future'
   led: number
+  monitor: never
 
   relay: never
   light: number | 'all'

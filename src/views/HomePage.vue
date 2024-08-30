@@ -1,6 +1,6 @@
 <script setup lang="ts">
 //import InnoventButton from '@/components/InnoventButton.vue'
-import { ctrlPC, ctrlLight, ctrSequential, ctrlBigScreen, ctrlMedia } from '@/api'
+import { ctrlPC, ctrlLight, ctrSequential, ctrlBigScreen, ctrlMedia, ctrlMonitor } from '@/api'
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue'
 
@@ -71,10 +71,8 @@ const allClick = async (value: boolean) => {
   }
 
   isAllSelect.value = value
-  console.log(new Date().getTime());
 
   await handleAllLight(value)
-  console.log(new Date().getTime());
   await handleAllEquipment(value)
 }
 
@@ -98,8 +96,6 @@ const equipmentClick = async (value: boolean) => {
   await handleAllEquipment(value)
 }
 
-
-let isPositioning = ref(false)
 function togglePositioning(value: boolean) {
   ctrlMedia(value ? 'positioning' : 'normal')
 }
@@ -422,19 +418,19 @@ function togglePositioning(value: boolean) {
         <div class="btns">
          
           <div class="box">
-            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(false)">
+            <div class="btn" @touchstart="handleTouchStart" @click="ctrlMedia('normal')">
               常规模式
             </div>
-            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(true)">
+            <div class="btn" @touchstart="handleTouchStart" @click="ctrlMedia('positioning')">
               定位模式
             </div>
           </div>
 
           <div class="box">
-            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(false)">
+            <div class="btn" @touchstart="handleTouchStart" @click="ctrlMonitor('visible')">
               监控显示
             </div>
-            <div class="btn" @touchstart="handleTouchStart" @click="togglePositioning(true)">
+            <div class="btn" @touchstart="handleTouchStart" @click="ctrlMonitor('hidden')">
               监控隐藏
             </div>
           </div>
