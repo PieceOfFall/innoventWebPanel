@@ -18,3 +18,4 @@ app.use(WebSocket, import.meta.env.VITE_WS_URL)
 app.use(ElementPlus)
 
 app.mount('#app')
+

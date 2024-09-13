@@ -16,6 +16,7 @@ export interface TargetOperationMap {
 
   soundbox: PowerCtrl
   sequential: PowerCtrl
+  command: 'tcp' | 'udp'
 }
 
 export interface TargetParamMap {
@@ -35,6 +36,7 @@ export interface TargetParamMap {
 
   soundbox: never
   sequential: never
+  command: CommandParam
 }
 
 type OperationType<T extends keyof TargetParamMap> = TargetOperationMap[T]
@@ -49,6 +51,7 @@ export interface WebSocketMsg<
     | 'big-screen'
     | 'soundbox'
     | 'led'
+    | 'command'
 > {
   target?: T
   operation: OperationType<T>
@@ -70,6 +73,13 @@ export interface LedParam {
 export interface CtrlMsg {
   code: MsgCode
   msg: string
+}
+
+export interface CommandParam {
+  ip: string
+  port: number
+  isHex: boolean
+  data: string
 }
 
 export enum MsgCode {
