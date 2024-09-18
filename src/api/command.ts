@@ -1,14 +1,20 @@
 import { sendDataToWebSocket } from '@/plugins/WebSocket'
-import type { TargetOperationMap, TargetParamMap } from '@/plugins/WebSocket/types'
 
 /**
  * 直接发送command指令
- * @param operationParam 操作参数
+ * @param device 设备名称
+ * @param action 操作
  */
 export function command(
-  operation: TargetOperationMap['command'],
-  operationParam: TargetParamMap['command']
+  device: string,
+  action: string
 ): void {
+  console.log(device);
+
+  const targetDevice = window.config.command[device]
+  const operationParam = targetDevice[action]
+  const operation = operationParam.operation
+  
   sendDataToWebSocket({
     target: 'command',
     operation,

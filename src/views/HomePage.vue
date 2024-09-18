@@ -12,9 +12,6 @@ import {
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 
-console.log(window.config);
-
-
 type Region = 'all' | 'center' | 'background' | 'global' | 'outlook'
 const selectedTab = ref<Region>('all')
 
@@ -26,7 +23,7 @@ const handleTouchStart = (event: TouchEvent) => {
   touchedElement.classList.add('active')
 }
 
-const changeRegion = (regionName:Region)=>selectedTab.value = regionName
+const changeRegion = (regionName: Region) => (selectedTab.value = regionName)
 
 //#region 总控
 //const lightId = ref<number>(1)
@@ -128,12 +125,33 @@ function togglePositioning(value: boolean) {
       <div class="logo">
         <img src="@/images/logo.png" />
         <span id="tabBox">
-          <div :class="selectedTab === 'all' ? 'selected-tab':'tab'" @click="changeRegion('all')">设备总控</div>
-          <div :class="selectedTab === 'center' ? 'selected-tab':'tab'" @click="changeRegion('center')">中心展区</div>
-          <div :class="selectedTab === 'background' ? 'selected-tab':'tab'" @click="changeRegion('background')">创立背景</div>
-          <div :class="selectedTab === 'global' ? 'selected-tab':'tab'" @click="changeRegion('global')">全球布局</div>
-          <div :class="selectedTab === 'outlook' ? 'selected-tab':'tab'" @click="changeRegion('outlook')">未来展望</div>
-
+          <div :class="selectedTab === 'all' ? 'selected-tab' : 'tab'" @click="changeRegion('all')">
+            设备总控
+          </div>
+          <div
+            :class="selectedTab === 'center' ? 'selected-tab' : 'tab'"
+            @click="changeRegion('center')"
+          >
+            中心展区
+          </div>
+          <div
+            :class="selectedTab === 'background' ? 'selected-tab' : 'tab'"
+            @click="changeRegion('background')"
+          >
+            创立背景
+          </div>
+          <div
+            :class="selectedTab === 'global' ? 'selected-tab' : 'tab'"
+            @click="changeRegion('global')"
+          >
+            全球布局
+          </div>
+          <div
+            :class="selectedTab === 'outlook' ? 'selected-tab' : 'tab'"
+            @click="changeRegion('outlook')"
+          >
+            未来展望
+          </div>
         </span>
       </div>
 
@@ -201,14 +219,38 @@ function togglePositioning(value: boolean) {
 
         <!-- 中央区域 -->
         <div id="center" v-if="selectedTab === 'center'">
-
           <div class="btns">
-            <div>
-              <div class="box">
-                <div class="btn" @touchstart="handleTouchStart" @click="allClick(true)">全部开</div>
-                <div class="btn" @touchstart="handleTouchStart" @click="allClick(false)">
-                  全部关
-                </div>
+            <div></div>
+            <div class="box">
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor1', 'poweron')">
+                识别桌1开
+              </div>
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor1', 'poweroff')">
+                识别桌1关
+              </div>
+            </div>
+            <div class="box">
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor2', 'poweron')">
+                识别桌2开
+              </div>
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor2', 'poweroff')">
+                识别桌2关
+              </div>
+            </div>
+            <div class="box">
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor3', 'poweron')">
+                识别桌3开
+              </div>
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor3', 'poweroff')">
+                识别桌3关
+              </div>
+            </div>
+            <div class="box">
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor4', 'poweron')">
+                识别桌4开
+              </div>
+              <div class="btn" @touchstart="handleTouchStart" @click="command('ttor4', 'poweroff')">
+                识别桌4关
               </div>
             </div>
           </div>
@@ -216,24 +258,412 @@ function togglePositioning(value: boolean) {
           <div class="btns">
             <div>
               <div class="box">
-                <div class="btn" @touchstart="handleTouchStart" @click="allClick(true)">全部开</div>
-                <div class="btn" @touchstart="handleTouchStart" @click="allClick(false)">
-                  全部关
+                <div
+                  class="btn"
+                  @touchstart="handleTouchStart"
+                  @click="command('pipeline', 'poweron')"
+                >
+                  管线小屏开
                 </div>
+                <div
+                  class="btn"
+                  @touchstart="handleTouchStart"
+                  @click="command('pipeline', 'poweroff')"
+                >
+                  管线小屏关
+                </div>
+              </div>
+            </div>
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('pipelineHost', 'poweron')"
+              >
+                管线主机开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('pipelineHost', 'poweroff')"
+              >
+                管线主机关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('centerAudioMute', 'poweron')"
+              >
+                区域静音开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('centerAudioMute', 'poweroff')"
+              >
+                区域静音关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('pipelineVol', 'down')"
+              >
+                区域音量调小
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('pipelineVol', 'up')"
+              >
+                区域音量调大
+              </div>
+            </div>
+
+          </div>
+
+          <div class="btns">
+            <div>
+              <div class="box">
+                <div
+                  class="btn"
+                  @touchstart="handleTouchStart"
+                  @click="command('welcomeLeader', 'poweron')"
+                >
+                  领导来访开
+                </div>
+                <div
+                  class="btn"
+                  @touchstart="handleTouchStart"
+                  @click="command('welcomeLeader', 'poweroff')"
+                >
+                  领导来访关
+                </div>
+                <div class="box">
+                  <div
+                    class="btn"
+                    @touchstart="handleTouchStart"
+                    @click="command('welcomeBig', 'poweron')"
+                  >
+                    欢迎大屏开
+                  </div>
+                  <div
+                    class="btn"
+                    @touchstart="handleTouchStart"
+                    @click="command('welcomeBig', 'poweroff')"
+                  >
+                    欢迎大屏关
+                  </div>
+                </div>
+
+                <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('centerLight', 'poweron')"
+              >
+                顶部灯带开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('centerLight', 'poweroff')"
+              >
+                顶部灯带关
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 创立背景区域 -->
+        <div id="background" v-if="selectedTab === 'background'">
+          <div class="btns">
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('backgroundAudioMute', 'poweron')"
+              >
+                区域静音开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('backgroundAudioMute', 'poweroff')"
+              >
+                区域静音关
+              </div>
+            </div>
+
+          </div>
+          <div class="btns">
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('backgroundLight', 'poweron')"
+              >
+                区域灯带开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('backgroundLight', 'poweroff')"
+              >
+                区域灯带关
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 全球布局区域 -->
+        <div id="global" v-if="selectedTab === 'global'">
+          <div class="btns">
+            <div class="box">
+              <div class="btn" @touchstart="handleTouchStart" @click="command('global', 'poweron')">
+                小屏开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('global', 'poweroff')"
+              >
+                小屏关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalLeft', 'poweron')"
+              >
+                小屏左开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalLeft', 'poweroff')"
+              >
+                小屏左关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalRight', 'poweron')"
+              >
+                小屏右开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalRight', 'poweroff')"
+              >
+                小屏右关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalHost', 'poweron')"
+              >
+                大屏主机开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalHost', 'poweroff')"
+              >
+                大屏主机关
+              </div>
+            </div>
+          </div>
+
+          <div class="btns">
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="
+                  command('globalBig1', 'poweron');
+                  command('globalBig2', 'poweron');
+                "
+              >
+                大屏开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="
+                  command('globalBig1', 'poweroff');
+                  command('globalBig2', 'poweroff');
+                "
+              >
+                大屏关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalLight', 'poweron')"
+              >
+                区域灯带开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalLight', 'poweroff')"
+              >
+                区域灯带关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalAudioMute', 'poweron')"
+              >
+                区域静音开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalAudioMute', 'poweroff')"
+              >
+                区域静音关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalVol', 'down')"
+              >
+                区域音量调小
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('globalVol', 'up')"
+              >
+                区域音量调大
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        <!-- 未来展望区域 -->
+        <div id="outlook" v-if="selectedTab === 'outlook'">
+
+          <div class="btns">
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookAudioMute1', 'poweron');command('outlookAudioMute2', 'poweron');"
+              >
+                区域静音开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookAudioMute1', 'poweroff');command('outlookAudioMute2', 'poweroff');"
+              >
+                区域静音关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookVol', 'down')"
+              >
+                区域音量调小
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookVol', 'up')"
+              >
+              区域音量调大
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookLight', 'poweron')"
+              >
+                区域灯带开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookLight', 'poweroff')"
+              >
+                区域灯带关
+              </div>
+            </div>
+          </div>
+
+
+          <div class="btns">
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlook', 'poweron')"
+              >
+                主机开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlook', 'poweroff')"
+              >
+                主机关
+              </div>
+            </div>
+
+            <div class="box">
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookBig', 'poweron')"
+              >
+                大屏开
+              </div>
+              <div
+                class="btn"
+                @touchstart="handleTouchStart"
+                @click="command('outlookBig', 'poweroff')"
+              >
+                大屏关
               </div>
             </div>
           </div>
 
         </div>
-
-        <!-- 创立背景区域 -->
-        <div id="background" v-if="selectedTab === 'background'">background</div>
-
-        <!-- 全球布局区域 -->
-        <div id="global" v-if="selectedTab === 'global'">global</div>
-
-        <!-- 未来展望区域 -->
-        <div id="outlook" v-if="selectedTab === 'outlook'">outlook</div>
       </div>
     </div>
   </div>
@@ -268,7 +698,7 @@ function togglePositioning(value: boolean) {
         float: right;
         display: flex;
         justify-content: space-between;
-        margin-right: 100px;
+        margin-right: 10px;
 
         .tab {
           text-align: center;
@@ -279,7 +709,7 @@ function togglePositioning(value: boolean) {
           background-color: rgba($color: #ffffffff, $alpha: 0.5);
           border-radius: 30px;
           margin: 0 10px;
-          box-shadow: 0px 0px 20px 1px rgba($color: #005CC8, $alpha: 0.25);
+          box-shadow: 0px 0px 20px 1px rgba($color: #005cc8, $alpha: 0.25);
           cursor: pointer;
         }
 
@@ -289,17 +719,17 @@ function togglePositioning(value: boolean) {
           font-weight: 700;
           padding: 10px 0;
           width: 140px;
-          color: #005CC8;
+          color: #005cc8;
           background-color: rgba($color: #ffffffff, $alpha: 0.5);
           border-radius: 30px;
           margin: 0 10px;
-          box-shadow: 0px 0px 20px 1px rgba($color: #005CC8, $alpha: 0.45); 
+          box-shadow: 0px 0px 20px 1px rgba($color: #005cc8, $alpha: 0.45);
         }
       }
     }
 
     .content {
-      padding-top: 80px;
+      padding-top: 40px;
       text-align: center;
 
       .title {
@@ -324,8 +754,8 @@ function togglePositioning(value: boolean) {
             justify-content: center;
             text-align: center;
 
-            height: 150px;
-            width: 150px;
+            height: 120px;
+            width: 120px;
             color: #305cc9;
             font-size: 25px;
             font-weight: bold;
